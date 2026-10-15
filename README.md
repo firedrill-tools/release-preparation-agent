@@ -28,3 +28,5 @@ npm run operate -- --repo workspace --task "Prepare a complete 1.5.0 release dra
 Seed into another directory with `npm run seed -- --dir /path/to/new-disposable-directory`. The seed command refuses an existing directory. The fixture has no remote. The tool never tags, commits, pushes or creates a GitHub release. This is deliberately a release preparation example, not a publication workflow.
 
 `npm test` exercises real Git history, missing commits, wrong versions, dirty worktrees, read-only MCP rejection and a verified local draft. These are offline Git/MCP checks, not a live Claude run. Live provider and new Firedrill integration proofs remain pending. This private repository has no license pending portfolio publication decisions.
+
+Explore related applications in the [Firedrill example catalog](https://github.com/firedrill-tools/firedrill-example-catalog). Product and setup references: [Firedrill](https://firedrill.run/) and the [official developer documentation](https://docs.firedrill.run/). Use documentation matching the qualified release; this repository records its current integration limits above.
