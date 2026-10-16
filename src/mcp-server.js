@@ -1,68 +1,93 @@
-import path from "node:path";
+/** Explicit manual synthetic-human stdio seam over the same managed source. */
+import { parseArgs } from "node:util";
 import { McpServer } from "@modelcontextprotocol/server";
 import { serveStdio } from "@modelcontextprotocol/server/stdio";
-import * as z from "zod/v4";
-import { ReleaseRepo } from "./release.js";
-
-const option = (name) => {
-  const i = process.argv.indexOf(name);
-  return i < 0 ? undefined : process.argv[i + 1];
-};
-const repository = option("--repo");
-if (!repository) throw new Error("--repo required");
-const repo = new ReleaseRepo(path.resolve(repository));
-const allowWrites = process.argv.includes("--allow-writes");
+import { z } from "zod";
+import { GitRunner } from "./git-runner.js";
+import { ManagedRelease, businessResult } from "./control.js";
+import { draftArgs } from "./snapshot.js";
+import { validateRoot } from "./frame.js";
+const { values } = parseArgs({
+  options: { repo: { type: "string" }, "allow-writes": { type: "boolean" } },
+});
+if (!values.repo) throw Error("--repo required");
+const controller = new AbortController(),
+  owner = {
+    signal: controller.signal,
+    deadline: performance.now() + 120000,
+    receipt: { data: { git: [] }, save() {} },
+    basicGuard() {
+      this.signal.throwIfAborted();
+      if (performance.now() >= this.deadline)
+        throw Error("manual tool server deadline exceeded");
+    },
+  },
+  root = validateRoot(values.repo),
+  runner = new GitRunner(root, owner),
+  store = new ManagedRelease(root, runner, owner),
+  server = new McpServer({
+    name: "synthetic-release-preparation",
+    version: "0.2.0",
+  });
 const result = (value) => ({
   content: [{ type: "text", text: JSON.stringify(value) }],
   isError: Boolean(value?.error),
 });
-const safe = (handler) => async (args) => {
-  try {
-    return result(await handler(args));
-  } catch (error) {
-    return result({
-      error: error instanceof Error ? error.message : String(error),
-    });
-  }
-};
-const server = new McpServer({
-  name: "synthetic-release-preparation",
-  version: "0.1.0",
-});
+function safe(name, handler) {
+  return async (args) => {
+    try {
+      return result(businessResult(name, await handler(args)));
+    } catch (e) {
+      return result({ error: e.message });
+    }
+  };
+}
 server.registerTool(
   "inspect_release",
   {
     description:
-      "Read Git HEAD, base tag, all unreleased commits, version policy and working tree status in the seeded sample.",
+      "Read complete current Git/source/version/clean state. A genuine inspection is required in this tool session before preparing a draft.",
     inputSchema: z.strictObject({}),
   },
-  safe(() => repo.inspect()),
+  safe("inspect_release", () => store.inspect()),
 );
 server.registerTool(
   "prepare_release_draft",
   {
     description:
-      "Write local release notes and metadata only after checking the exact version, HEAD and complete commit range. Never tags, pushes or publishes.",
-    inputSchema: z.strictObject({
-      version: z.string(),
-      baseTag: z.string(),
-      expectedHead: z.string(),
-      commitIds: z.array(z.string()),
-    }),
+      "Prepare fixed local notes/metadata after exact source/intent/permission and complete range checks. Publication is unavailable.",
+    inputSchema: draftArgs,
   },
-  safe((args) =>
-    allowWrites ? repo.prepareDraft(args) : { error: "writes_not_authorized" },
+  safe("prepare_release_draft", (args) =>
+    values["allow-writes"]
+      ? store.prepare(args)
+      : { error: "writes_not_authorized" },
   ),
 );
 server.registerTool(
   "read_release_draft",
   {
     description:
-      "Read local draft notes, metadata and Git state for verification; no publication operation exists.",
+      "Verify current local draft files against original recorded source/decision. Never tags pushes or publishes.",
     inputSchema: z.strictObject({}),
   },
-  safe(() => repo.readDraft()),
+  safe("read_release_draft", () => store.readDraft()),
 );
-void serveStdio(() => server, {
-  onerror: (error) => console.error(error.message),
+const service = serveStdio(() => server, {
+  onerror: (e) => console.error(e.message),
 });
+let closing;
+function close(reason) {
+  closing ??= (async () => {
+    controller.abort(Error(reason));
+    await runner.close();
+    await service.close();
+  })();
+  void closing.catch((e) => {
+    console.error(e.message);
+    process.exitCode = 1;
+  });
+}
+process.stdin.once("end", () => close("manual stdio input closed"));
+for (const signal of ["SIGINT", "SIGTERM", "SIGHUP"])
+  process.once(signal, () => close(signal + " cancelled manual tool server"));

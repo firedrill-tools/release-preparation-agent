@@ -1,5 +1,7 @@
 # Release preparation agent
 
+**Development checkpoint:**37 real source/Git/process/managed/stdio checks pass. Fresh seeded repositories now carry durable UUID/read/intent/draft authority, original source/process evidence, explicit no-op and truthful partial two-file outcomes. The manual stdio seam uses this backend. The normal agent launch below is being replaced with owned inline MCP/native completion and private receipts; its old generic write flag/default model/result reporting are not qualified. Follow [PLAN.md](PLAN.md) for the current work and remaining gates.
+
 A Claude Agent SDK application inspects a disposable Git repository and prepares local release notes and metadata through a restricted MCP server. The fixture has a `v1.4.0` tag and three unreleased commits. The agent must account for all three, use the policy-derived `1.5.0` version, and stop before any tag, push or hosted release.
 
 ## Run locally

@@ -2,7 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { randomUUID, createHash } from "node:crypto";
 export const hash = (value) => createHash("sha256").update(value).digest("hex");
-export function readRegular(file) {
+export function readRegular(file, { binary = false } = {}) {
   const initial = fs.lstatSync(file);
   if (
     !initial.isFile() ||
@@ -29,7 +29,9 @@ export function readRegular(file) {
       throw Error("release file changed while reading");
     return {
       bytes,
-      text: new TextDecoder("utf-8", { fatal: true }).decode(bytes),
+      text: binary
+        ? null
+        : new TextDecoder("utf-8", { fatal: true }).decode(bytes),
       sha256: hash(bytes),
       identity: `${before.dev}:${before.ino}`,
     };

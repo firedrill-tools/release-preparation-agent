@@ -32,6 +32,14 @@ The [primary Conventional Commits1.0.0 specification](https://www.conventionalco
 
 ## Current status
 
+### Managed source / owned Git checkpoint (37 checks)
+
+Task1's managed contract and task2's real Git runner/manual MCP seam now pass37 checks in `/tmp/firedrill-release-managed37-stdio.log`. Every new seed has a fresh private UUID and explicit fictional author provenance. Full bounded binary Git/source images, original16 read-only command outputs and real PID/exit records bind complete source, refs/config/index/graph and both fixed draft destinations. Parent cancellation and shared deadlines terminate an actual `cat-file` child waiting on owned stdin and await its real exit. The narrow command catalog cannot mutate refs, invoke a shell or publish.
+
+Private durable operation/read/decision records require genuine inspection in the same controller and caller scope, exact repository/version/base/HEAD/complete-range intent, separate write permission and unchanged original source. An existing verified draft needs a fresh read and records an explicit unchanged outcome. Six independent Node/Git processes produce one complete draft under the persistent SQLite mutex. Control symlinks, forged records/files, changed Git source at unchanged HEAD and borrowed observations reject. A prepared decision precedes the two separate flushed exclusive0600 file writes; real between-file and failed-final-journal probes retain actual effects and block new work without auto repair. Closing authority remains available in prepared state. Manual stdio uses this same managed backend with declared synthetic-human scope and projects business data only.
+
+The normal `src/agent.js` still uses its old launch path. Wiring the real inline SDK server to these controls, original native completion, private lifecycle receipts and all remaining tasks3–5 is next. This37check checkpoint is not independent completion or live-provider evidence. Earlier source-checkpoint limitations below describe their historical state.
+
 Four original source/real stdio checks plus seven private source and three actual native probes are complete; they are not a fixed implementation or live quality proof. Task1 implementation starts with original source/version/Git scope and exact draft evidence. Tasks2–5 remain active plans. Portfolio32/40 independent applications complete after data-repair-agent's exact92check Linux/source artifact qualification;8remain including this project. External gates remain parked. No human input is needed for the next development work.
 
 ## First source checkpoint
