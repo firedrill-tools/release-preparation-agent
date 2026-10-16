@@ -12,4 +12,11 @@ jobs:
           node-version: '22'
           cache: npm
       - run: npm ci
-      - run: npm test
+      - run: npm run package:check
+      - uses: actions/upload-artifact@v4
+        with:
+          name: release-preparation-source
+          path: |
+            dist/*-source.tar.gz
+            dist/qualification.json
+            dist/fresh-tests.log

@@ -6,6 +6,7 @@ import { DatabaseSync } from "node:sqlite";
 import { z } from "zod";
 import { readRegular, writeStaged, hash } from "./source.js";
 import { parseJSON } from "./json.js";
+import { DATASET_SHA256 } from "./_dataset-manifest.js";
 import {
   validateRoot,
   sourceFrame,
@@ -62,11 +63,28 @@ const decisionSchema = z.strictObject({
   status: z.enum(["prepared", "applied", "unchanged"]),
   referencedDecisionId: uuid.nullable(),
 });
+export const populationReference = z.strictObject({
+  id: z.literal("release-populations"),
+  version: z.literal("1.0.0"),
+  caseId: line(80),
+  datasetSha256: z.literal(DATASET_SHA256),
+  definitionSha256: hex,
+});
+export const populationHeader = populationReference
+  .extend({
+    schemaVersion: z.literal(1),
+    instanceId: uuid,
+    seedSha256: hex,
+    createdAt: z.string().datetime(),
+    scope: z.literal("original_explicit_synthetic_git_seed"),
+  })
+  .strict();
 const controlSchema = z.strictObject({
   synthetic: z.literal(true),
   version: z.literal(1),
   instanceId: uuid,
   rootIdentity: line(160),
+  population: populationReference.nullable(),
   provenance: z.strictObject({
     kind: z.literal("explicit_synthetic_release_author"),
     priorModelEvidence: z.null(),
@@ -272,6 +290,7 @@ export function initializeControl(root) {
       version: 1,
       instanceId: randomUUID(),
       rootIdentity: f.rootIdentity,
+      population: null,
       provenance: {
         kind: "explicit_synthetic_release_author",
         priorModelEvidence: null,
@@ -321,7 +340,39 @@ export class ManagedRelease {
       (this.instanceId !== undefined && value.instanceId !== this.instanceId)
     )
       throw Error("managed release instance/root changed");
-    return { source, value };
+    const authoritySources = [],
+      headerFile = path.join(this.directory, "population.json"),
+      seedFile = path.join(this.directory, "population-seed.json");
+    if (value.population) {
+      const headerSource = readRegular(headerFile),
+        header = populationHeader.parse(parseJSON(headerSource.text)),
+        seed = readRegular(seedFile);
+      if (
+        header.instanceId !== value.instanceId ||
+        !same(
+          Object.fromEntries(
+            Object.keys(populationReference.shape).map((k) => [k, header[k]]),
+          ),
+          value.population,
+        ) ||
+        seed.sha256 !== header.seedSha256
+      )
+        throw Error(
+          "private population authority differs from original instance/source",
+        );
+      authoritySources.push(
+        { path: "population.json", source: headerSource },
+        { path: "population-seed.json", source: seed },
+      );
+    } else
+      for (const file of [headerFile, seedFile])
+        try {
+          fs.lstatSync(file);
+          throw Error("private population authority reference missing");
+        } catch (e) {
+          if (e.code !== "ENOENT") throw e;
+        }
+    return { source, value, authoritySources };
   }
   transaction(handler) {
     this.readControl();
@@ -452,6 +503,12 @@ export class ManagedRelease {
       controlBodyBase64: control.source.bytes.toString("base64"),
       controlSha256: control.source.sha256,
       control: control.value,
+      authorityImages: control.authoritySources.map(({ path, source }) => ({
+        path,
+        sha256: source.sha256,
+        identity: source.identity,
+        size: source.bytes.length,
+      })),
       draftFiles: files,
       sourceClean: this.clean(snapshot, control.value, files),
     };

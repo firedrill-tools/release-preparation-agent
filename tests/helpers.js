@@ -8,6 +8,7 @@ import { seed } from "../scripts/seed.js";
 import { GitRunner } from "../src/git-runner.js";
 import { ManagedRelease } from "../src/control.js";
 import { intentFor } from "../src/snapshot.js";
+import { initialize as initializeCase } from "../src/datasets.js";
 export async function withSource(root, action) {
   const controller = new AbortController(),
     owner = {
@@ -28,25 +29,33 @@ export async function withSource(root, action) {
 }
 export async function environment(
   t,
-  { sequence, mutate = (frames) => frames } = {},
+  { sequence, mutate = (frames) => frames, caseId, task } = {},
 ) {
   const directory = fs.mkdtempSync(
       path.join(os.tmpdir(), "release-owned-runtime-"),
     ),
-    root = seed(path.join(directory, "repository")),
-    initial = await withSource(root, (s) => s.capture()),
-    intent = intentFor(initial.snapshot.business),
-    args = {
-      version: intent.version,
-      baseTag: intent.baseTag,
-      expectedHead: intent.head,
-      commitIds: intent.commitIds,
-    };
-  const actions = sequence ?? [
-      ["mcp__release__inspect_release", {}],
-      ["mcp__release__prepare_release_draft", args],
-      ["mcp__release__read_release_draft", {}],
-    ],
+    root = path.join(directory, "repository"),
+    caseSeed = caseId ? await initializeCase(root, caseId) : (seed(root), null),
+    initial = caseSeed
+      ? caseSeed.source
+      : await withSource(root, (s) => s.capture()),
+    intent = initial ? intentFor(initial.snapshot.business) : null,
+    args = intent
+      ? {
+          version: intent.version,
+          baseTag: intent.baseTag,
+          expectedHead: intent.head,
+          commitIds: intent.commitIds,
+        }
+      : null;
+  const actions =
+      typeof sequence === "function"
+        ? sequence({ args, intent, initial })
+        : (sequence ?? [
+            ["mcp__release__inspect_release", {}],
+            ["mcp__release__prepare_release_draft", args],
+            ["mcp__release__read_release_draft", {}],
+          ]),
     requests = [];
   const provider = createServer(async (req, res) => {
     try {
@@ -163,13 +172,15 @@ export async function environment(
       ),
     options: {
       repository: root,
-      task: "Inspect the complete release scope and exact version policy, prepare only the caller-authorized local draft, reread and verify. Never publish.",
+      task:
+        task ??
+        "Inspect the complete release scope and exact version policy, prepare only the caller-authorized local draft, reread and verify. Never publish.",
       model: "claude-sonnet-4-6",
       apiKey: "synthetic-release-owned-key",
       baseUrl: `http://127.0.0.1:${provider.address().port}`,
       outputRoot: directory,
-      allowWrites: true,
-      intent,
+      allowWrites: intent !== null,
+      intent: intent ?? undefined,
     },
   };
 }

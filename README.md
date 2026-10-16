@@ -2,7 +2,7 @@
 
 A Claude Agent SDK application prepares release notes and metadata for a fictional disposable Git checkout. Three MCP tools inspect the complete unreleased graph and full messages, prepare the exact policy version, and verify the saved local draft. Tagging, committing, pushing and hosted publication are unavailable to the model.
 
-Development is active. The managed source and normal native SDK path are implemented; rich case data, exclusive case/reset CLI and fresh distribution qualification remain in [PLAN.md](PLAN.md). Independent portfolio completion has not been claimed.
+The managed source, normal native SDK path and twelve private Git cases are implemented. [PLAN.md](PLAN.md) records development and the fresh distribution gate; the [catalog](https://github.com/firedrill-tools/firedrill-example-catalog) records exact qualified revisions and artifact evidence. Live provider/Firedrill/publication gates remain separate.
 
 ## Run locally
 
@@ -45,7 +45,13 @@ Private `artifacts/<run-id>/trace.json` is prepared0700/0600 before provider key
 
 The runtime bounds16 prepared native requests/turns,4096 output tokens,256 retained SDK messages,2MiB request/1MiB decoded response,30s native HTTP,120s default shared operation (10..300000ms configurable),512 Git commands,5s/1MiB per command and10s independent final Git observation. It closes durable operation authority before SDK/tool draining and awaits actual child exits, bridge and HTTP cleanup. These are owned process/application controls, not an OS sandbox or remote billing guarantee. Unknown/invalid/observed-zero counters remain distinct. `costUsd` is unknown; `sdkReportedCostUsd` is a separate SDK estimate, never paid billing evidence. Model prose and file existence do not by themselves prove an operation-scoped applied decision or publication.
 
-## Verification and remaining work
+## Private cases and distribution
+
+`npm run cases -- list` describes all twelve pinned cases. Use `init --repo NEW --case ID`, `inspect --repo ROOT`, or `reset --repo ROOT --destination FRESH` after `npm run cases --`. Reset reconstructs the original case under new private authority and preserves the old checkout/mutex/effects/evidence. Missing/foreign/stripped authority and unknown corruption reject. Prepared and maximum-version cases remain explicit blocked/invalid initial conditions. [data/README.md](data/README.md) describes profiles, full original Git encodings, historical unknowns and ten native versus two zero-request preflight controls.
+
+`npm run check:data` reproduces the original525590bytes. `npm run package:source` creates a complete manifest-bearing portable source archive. `npm run package:check` verifies locked complete and production-only installs outside the checkout, all130checks/all12private case CLI paths, installed normal SDK/native/Git draft/read, missing keys/all signals/final failure after actual files, unchanged delivered source and repeated archive bytes. CI uploads the archive and proof logs; see [COMPATIBILITY.md](COMPATIBILITY.md) for exact pinned seams and evidence limits.
+
+## Verification and remaining external work
 
 `npm test` uses real local Git, real processes, the actual pinned bundled Claude CLI/public hooks/inline MCP and owned loopback HTTP with explicit controlled provider responses. It includes ordinary complete draft/read, incomplete native responses before writes, permission/intent/source/forgery/no-op checks, concurrent writers/runtimes, partial files/journal/receipts, native/source/cleanup failures after actual commits, parent/deadline/CLI signals and literal private-file canaries. These are offline execution and fault controls; they are not live model semantic quality, provider billing or saved Firedrill runs.
 

@@ -43,7 +43,7 @@ export async function runOwnedAgent(options = {}) {
   const allowWrites = options.allowWrites ?? false,
     intent = allowWrites ? intentSchema.parse(options.intent) : null;
   if (!allowWrites && options.intent != null)
-    throw Error("read-only operation cannot claim repair intent");
+    throw Error("read-only operation cannot claim release intent");
   const timeoutMs = options.timeoutMs ?? 120000;
   if (!Number.isFinite(timeoutMs) || timeoutMs < 10 || timeoutMs > 300000)
     throw Error("timeoutMs must be10..300000");
@@ -89,7 +89,22 @@ export async function runOwnedAgent(options = {}) {
     },
     async guard() {
       this.basicGuard();
-      const control = store.readControl().value;
+      const currentControl = store.readControl(),
+        control = currentControl.value;
+      if (
+        !same(
+          currentControl.authoritySources.map(({ path, source }) => ({
+            path,
+            sha256: source.sha256,
+            identity: source.identity,
+            size: source.bytes.length,
+          })),
+          this.initialAuthority,
+        )
+      )
+        throw Error(
+          "original private source authority changed during release operation",
+        );
       if (!same(sourceFrame(store.root), this.initialFrame))
         throw Error(
           "original repository source changed during release operation",
@@ -182,6 +197,20 @@ export async function runOwnedAgent(options = {}) {
     receipt.data.initialSource = await store.capture();
     owner.initialFrame = receipt.data.initialSource.snapshot.frame;
     owner.source = receipt.data.initialSource;
+    const authority = store.readControl().authoritySources;
+    owner.initialAuthority = authority.map(({ path, source }) => ({
+      path,
+      sha256: source.sha256,
+      identity: source.identity,
+      size: source.bytes.length,
+    }));
+    receipt.data.initialAuthority = authority.map(({ path, source }) => ({
+      path,
+      bodyBase64: source.bytes.toString("base64"),
+      sha256: source.sha256,
+      identity: source.identity,
+      size: source.bytes.length,
+    }));
     receipt.save();
     const registration = store.register(hash(task), allowWrites, intent);
     owner.credential = registration.credential;
@@ -507,7 +536,14 @@ export async function runOwnedAgent(options = {}) {
             receipt.data.initialSource?.snapshot.frame,
             receipt.data.finalSource.snapshot.frame,
           ) ||
-          !same(owner.source?.draftFiles, receipt.data.finalSource.draftFiles)
+          !same(
+            owner.source?.draftFiles,
+            receipt.data.finalSource.draftFiles,
+          ) ||
+          !same(
+            owner.initialAuthority,
+            receipt.data.finalSource.authorityImages,
+          )
         )
           throw Error(
             "original source changed before final release observation",

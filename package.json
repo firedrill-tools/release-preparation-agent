@@ -10,7 +10,11 @@
     "seed": "node scripts/seed.js",
     "test": "node --test tests/*.test.js",
     "operate": "node src/agent.js",
-    "inspect": "node scripts/inspect.js"
+    "inspect": "node scripts/inspect.js",
+    "cases": "node scripts/cases.js",
+    "check:data": "node scripts/build-datasets.js --check",
+    "package:source": "node scripts/package.mjs",
+    "package:check": "node scripts/check-package.mjs"
   },
   "dependencies": {
     "@anthropic-ai/claude-agent-sdk": "0.3.300",
