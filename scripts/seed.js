@@ -18,6 +18,10 @@ export function seed(directory) {
         "-c",
         "core.fsmonitor=false",
         "-c",
+        "maintenance.auto=false",
+        "-c",
+        "gc.auto=0",
+        "-c",
         "core.hooksPath=" +
           (process.platform === "win32" ? "NUL" : "/dev/null"),
         ...args,
