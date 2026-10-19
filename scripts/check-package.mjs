@@ -110,6 +110,10 @@ try {
   );
   verify();
   run("npm", ["ci", "--no-audit", "--no-fund"], directory);
+  if(!fs.existsSync(path.join(directory,'firedrill/scenario.json'))||fs.existsSync(path.join(directory,'firedrill/node_modules')))throw new Error('archive integration boundary differs');
+  run('npm',['ci','--prefix','firedrill','--ignore-scripts','--no-audit','--no-fund'],directory);
+  run('npm',['test','--prefix','firedrill'],directory);
+
   const suite = run("npm", ["test"], directory);
   fs.mkdirSync(path.join(root, "dist"), { recursive: true });
   fs.writeFileSync(path.join(root, "dist/fresh-tests.log"), suite);

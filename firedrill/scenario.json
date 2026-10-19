@@ -1,0 +1,53 @@
+{
+  "schemaVersion": "2026-10-14",
+  "name": "release-preparation-agent \u2014 actual managed source and native MCP agent",
+  "target": {
+    "kind": "command",
+    "argv": [
+      "node",
+      "firedrill/target.mjs"
+    ]
+  },
+  "scenarios": [
+    {
+      "id": "complete-release",
+      "name": "complete-release run",
+      "input": {
+        "caseId": "complete-release",
+        "action": "run",
+        "task": "Inspect the exact current source and explain the requested local release scope without changing any files.",
+        "allowWrites": false,
+        "intent": null
+      }
+    },
+    {
+      "id": "dirty-review-note",
+      "name": "dirty-review-note run",
+      "input": {
+        "caseId": "dirty-review-note",
+        "action": "run",
+        "task": "Inspect the source and explain the ambiguity or blocker without changing any files.",
+        "allowWrites": false,
+        "intent": null
+      }
+    },
+    {
+      "id": "busy-merge-release",
+      "name": "busy-merge-release inspect",
+      "input": {
+        "caseId": "busy-merge-release",
+        "action": "inspect",
+        "task": "Inspect actual original business history without model execution or changes.",
+        "allowWrites": false,
+        "intent": null
+      }
+    }
+  ],
+  "repetitions": 1,
+  "concurrency": 1,
+  "limits": {
+    "timeoutMs": 240000,
+    "maxRuns": 3,
+    "maxOutputBytes": 4194304
+  }
+}

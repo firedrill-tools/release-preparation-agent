@@ -56,3 +56,7 @@ The runtime bounds16 prepared native requests/turns,4096 output tokens,256 retai
 `npm test` uses real local Git, real processes, the actual pinned bundled Claude CLI/public hooks/inline MCP and owned loopback HTTP with explicit controlled provider responses. It includes ordinary complete draft/read, incomplete native responses before writes, permission/intent/source/forgery/no-op checks, concurrent writers/runtimes, partial files/journal/receipts, native/source/cleanup failures after actual commits, parent/deadline/CLI signals and literal private-file canaries. These are offline execution and fault controls; they are not live model semantic quality, provider billing or saved Firedrill runs.
 
 Enabled live model credentials/budget and semantic/billing review, qualified new Firedrill connection/persisted scenarios, real repository/account access and publication/license are parked. This private repository has no selected public license. See the [Firedrill example catalog](https://github.com/firedrill-tools/firedrill-example-catalog), [Firedrill](https://firedrill.run/) and [official documentation](https://docs.firedrill.run/) for product context; the integration must use the qualified new release.
+
+## Current Firedrill integration
+
+Released CLI/SDK 2.2.2, current command invocation, remote operator MCP and recovery are documented in [firedrill/README.md](firedrill/README.md). Offline checks preserve actual managed-source/native key behavior and independent caller intent. Authenticated persisted runs and live quality/cost remain separate parked gates.
