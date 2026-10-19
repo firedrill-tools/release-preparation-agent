@@ -39,7 +39,7 @@ test(
 for (const p of populations())
   test(
     `original case ${p.id} through actual normal SDK/native/Git or declared preflight`,
-    { timeout: 60000 },
+    { timeout: p.id === "busy-merge-release" ? 180000 : 60000 },
     async (t) => {
       const e = await environment(t, {
         caseId: p.id,

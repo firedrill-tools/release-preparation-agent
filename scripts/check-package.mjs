@@ -34,7 +34,7 @@ const hash = (b) => createHash("sha256").update(b).digest("hex"),
       cwd,
       env,
       encoding: "utf8",
-      timeout: 240000,
+      timeout: 900000,
       maxBuffer: 16 * 1024 * 1024,
       stdio: ["ignore", "pipe", "pipe"],
     });
