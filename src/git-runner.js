@@ -157,7 +157,10 @@ export class GitRunner {
       }
     };
     if (cleanup) {
-      this.cleanupDeadline ??= performance.now() + 10000;
+      // The full final observation persists all 16 Git command receipts. Large
+      // managed populations retain tens of MiB of original source evidence;
+      // allow their durable writes while preserving each child's 5s limit.
+      this.cleanupDeadline ??= performance.now() + 30000;
       if (performance.now() >= this.cleanupDeadline) {
         this.active = false;
         throw Error("Git final observation cleanup budget exhausted");
