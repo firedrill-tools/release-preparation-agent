@@ -6,6 +6,8 @@ Simulate this Claude Agent SDK AI agent with [Firedrill](https://firedrill.run/)
 
 The managed source, normal native SDK path and twelve private Git cases are implemented. [PLAN.md](PLAN.md) records development and the fresh distribution gate; the [catalog](https://github.com/firedrill-tools/firedrill-example-catalog) records exact qualified revisions and artifact evidence. Live provider/Firedrill/publication gates remain separate.
 
+This example repository is publicly viewable. A project license has not been selected.
+
 ## Run locally
 
 Requires Node >=22.13, npm and Git. Pinned runtime: Claude Agent SDK0.3.300, MCP2.3.1, Undici7.30.1 and Zod4.6.7.
@@ -57,7 +59,7 @@ The runtime bounds16 prepared native requests/turns,4096 output tokens,256 retai
 
 `npm test` uses real local Git, real processes, the actual pinned bundled Claude CLI/public hooks/inline MCP and owned loopback HTTP with explicit controlled provider responses. It includes ordinary complete draft/read, incomplete native responses before writes, permission/intent/source/forgery/no-op checks, concurrent writers/runtimes, partial files/journal/receipts, native/source/cleanup failures after actual commits, parent/deadline/CLI signals and literal private-file canaries. These are offline execution and fault controls; they are not live model semantic quality, provider billing or saved Firedrill runs.
 
-Enabled live model credentials/budget and semantic/billing review, authenticated Firedrill scenario/run persistence verification, real repository/account access and publication/license are parked. This private repository has no selected public license. See the [Firedrill example catalog](https://github.com/firedrill-tools/firedrill-example-catalog), [Firedrill](https://firedrill.run/) and [official documentation](https://docs.firedrill.run/) for product context; the current adapter is documented in [firedrill/README.md](firedrill/README.md).
+Enabled live model credentials/budget and semantic/billing review, authenticated Firedrill scenario/run persistence verification, real repository/account access and license are parked. This public repository has no selected project license. See the [Firedrill example catalog](https://github.com/firedrill-tools/firedrill-example-catalog), [Firedrill](https://firedrill.run/) and [official documentation](https://docs.firedrill.run/) for product context; the current adapter is documented in [firedrill/README.md](firedrill/README.md).
 
 ## Current Firedrill integration
 
