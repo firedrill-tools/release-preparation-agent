@@ -2,19 +2,24 @@
 
 The optional execution toolchain exact-pins released CLI and TypeScript SDK **2.2.2**, verified October 19, 2026. Node 22+ is required. The application retains its separately locked Claude Agent SDK/native HTTP/local MCP runtime.
 
-## Prepare and select scope
+## Set up Firedrill
 
-From the repository root:
+From the repository root, install this application's locked dependencies and the optional simulation clients:
 
 ```sh
 npm ci
 npm ci --prefix firedrill --ignore-scripts --no-audit --no-fund
-npm test --prefix firedrill
-firedrill_cli=firedrill/node_modules/@firedrill-run/cli/bin/firedrill.mjs
-node "$firedrill_cli" validate firedrill/scenario.json --json --non-interactive
 ```
 
-Validation is offline and allocates no batch. Authorize and select the actual project/environment with `node "$firedrill_cli" init` in a human terminal. Automation uses `FIREDRILL_TOKEN`, `FIREDRILL_PROJECT_ID` and `FIREDRILL_ENVIRONMENT_ID` from its secret store. The application independently requires `ANTHROPIC_API_KEY` and an enabled `CLAUDE_MODEL` or recipe `configuration.parameters.model`. Keep credentials out of recipes and source.
+Sign in and choose the Firedrill project and environment once:
+
+```sh
+npx firedrill-run init
+```
+
+Complete browser authorization when prompted. Initialization writes `firedrill.config.json` in this repository; it does not run the AI agent. Installation choices are optional: skip duplicate SDK/client installation if you are using the locked `firedrill/` toolchain above. Keep this application's runtime requirements from the root README; the clients' Node.js minimum does not replace them.
+
+Automation uses `FIREDRILL_TOKEN`, `FIREDRILL_PROJECT_ID` and `FIREDRILL_ENVIRONMENT_ID` from its secret store. The application independently requires `ANTHROPIC_API_KEY` and an enabled `CLAUDE_MODEL` or recipe `configuration.parameters.model`. Keep credentials out of recipes and source.
 
 ## Execute the actual application
 
@@ -22,14 +27,25 @@ With an authorized provider budget:
 
 ```sh
 node firedrill/simulate.mjs --preview
-node "$firedrill_cli" simulate firedrill/scenario.json --scenario complete-release --json --non-interactive
+node firedrill/simulate.mjs
 ```
 
 The bounded sequential recipe initializes an actual managed private case and invokes the normal Claude SDK/bundled CLI and narrow local stdio MCP runtime. Starter and blocker tasks are explicitly read-only; the busy case invokes the original model-free case inspector. No injected SDK/child/provider/scripted agent is added. Initialization and private reference/seed/control authority remain outside model context; only existing business tools reach the model. The application's local target MCP is separate from Firedrill's remote OAuth operator MCP.
 
 `allowWrites` is a required literal caller boolean, separate from case/task identity. False requires `intent: null`; true requires an explicit bounded structured caller intent, validated again by the normal application before model work. No intent or grant is derived from fixture task/focus. The recipe grants no writes. For intentional fictional writes, review the exact current source and caller intent through the application's documented preflight before constructing a new recipe. Existing exact identity/evidence/current revision/original source/decision checks remain authoritative. Never blindly retry after uncertainty or repair prepared unknown decisions.
 
-Each invocation first saves outer run/attempt/scenario IDs in private `.runs/firedrill/attempt-*/invocation.json`, then initializes a distinct absent workspace leaf. A new attempt never resets previous files/history/mutex/effects/receipts. Original CLI output and local paths remain actual evidence; failure is nonzero with the original run/workspace locator. Operator/CI credentials are removed before dispatch. Current ID-only invocation excludes controller assessments and rejects unsupported Tool bindings. Retain partial effects and unknown cleanup/source/billing outcomes; local termination does not establish rollback or provider cancellation. Files are local evidence, not uploaded platform artifacts. Release drafts remain local: no tag/push/hosted publication or broad shell tool is granted. Data repair remains within its original narrow CSV/JSON business tools.
+Each invocation first saves outer run/attempt/scenario IDs in private `.runs/firedrill/attempt-*/invocation.json`, then initializes a distinct absent workspace leaf. A new attempt never resets previous files/history/mutex/effects/receipts. Original CLI output and local paths remain actual evidence; failure is nonzero with the original run/workspace locator. Operator/CI credentials are removed before dispatch. Current ID-only invocation excludes controller assessments and rejects unsupported Tool bindings. Retain partial effects and unknown cleanup/source/billing outcomes; local termination does not establish rollback or provider cancellation. Files are local evidence, not uploaded platform artifacts. Release drafts remain local: no tag/push/hosted publication or broad shell tool is granted.
+
+## Offline verification
+
+These checks are optional when getting started; they do not authorize an account or run a paid model:
+
+```sh
+node firedrill/node_modules/@firedrill-run/cli/bin/firedrill.mjs validate firedrill/scenario.json --json --non-interactive
+npm test --prefix firedrill
+```
+
+The saved recipe is an observation/exploration example, not a claim of agent correctness. It has no Firedrill rubric or CI gate. Execution success and any application-owned checks are distinct from a scored assessment. Local evidence paths are not uploaded captures; the evidence and proof limits described in this guide remain in effect.
 
 ## MCP, recovery and CI
 
