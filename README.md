@@ -4,7 +4,7 @@ A Claude Agent SDK application prepares release notes and metadata for a fiction
 
 Simulate this Claude Agent SDK AI agent with [Firedrill](https://firedrill.run/), a simulation platform for AI agents. Start with the [Firedrill setup and simulation guide](firedrill/README.md); your coding agent can operate it while this application's runner stays in your repository or CI.
 
-The managed source, normal native SDK path and twelve private Git cases are implemented. [PLAN.md](PLAN.md) records development and the fresh distribution gate; the [catalog](https://github.com/firedrill-tools/firedrill-example-catalog) records exact qualified revisions and artifact evidence. Live provider/Firedrill/publication gates remain separate.
+The managed source, normal native SDK path and twelve private Git cases are implemented. [PLAN.md](PLAN.md) records development and the fresh distribution gate; the [Firedrill examples](https://docs.firedrill.run/guides/examples) records exact qualified revisions and artifact evidence. Live provider/Firedrill/publication gates remain separate.
 
 This example repository is publicly viewable. A project license has not been selected.
 
@@ -59,7 +59,7 @@ The runtime bounds16 prepared native requests/turns,4096 output tokens,256 retai
 
 `npm test` uses real local Git, real processes, the actual pinned bundled Claude CLI/public hooks/inline MCP and owned loopback HTTP with explicit controlled provider responses. It includes ordinary complete draft/read, incomplete native responses before writes, permission/intent/source/forgery/no-op checks, concurrent writers/runtimes, partial files/journal/receipts, native/source/cleanup failures after actual commits, parent/deadline/CLI signals and literal private-file canaries. These are offline execution and fault controls; they are not live model semantic quality, provider billing or saved Firedrill runs.
 
-Enabled live model credentials/budget and semantic/billing review, authenticated Firedrill scenario/run persistence verification, real repository/account access and license are parked. This public repository has no selected project license. See the [Firedrill example catalog](https://github.com/firedrill-tools/firedrill-example-catalog), [Firedrill](https://firedrill.run/) and [official documentation](https://docs.firedrill.run/) for product context; the current adapter is documented in [firedrill/README.md](firedrill/README.md).
+Enabled live model credentials/budget and semantic/billing review, authenticated Firedrill scenario/run persistence verification, real repository/account access and license are parked. This public repository has no selected project license. See the [Firedrill examples](https://docs.firedrill.run/guides/examples), [Firedrill](https://firedrill.run/) and [official documentation](https://docs.firedrill.run/) for product context; the current adapter is documented in [firedrill/README.md](firedrill/README.md).
 
 ## Current Firedrill integration
 
